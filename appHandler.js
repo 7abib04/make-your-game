@@ -18,11 +18,11 @@ const developmentOverlay = document.querySelector(".development-overlay");
 const continueStoryButton = document.querySelector(".continue-story-button");
 
 const movementCooldown = 100;
-const shotCooldown = 400;
+const shotCooldown = 300;
 const width = 15;
 const movementSpeed = 1;
 const gameTime = 50; // Total game time in seconds
-
+let isGameRestarted = false;
 let frameCount = 0;
 let fps = 0;
 let lastFpsUpdateTime = 0;
@@ -166,7 +166,7 @@ function shootLaser() {
       resultDisplay.innerHTML = "Score: " + result;
 
       // Show development message when score reaches 350
-      if (result >= 350 && !developmentShown) {
+      if (result >= 250 && !developmentShown) {
         developmentShown = true;
         pauseGame();
         showDevelopmentMessage();
@@ -475,9 +475,10 @@ function restartGame() {
   gameStartTime = null;
   remainingTime = gameTime;
   developmentShown = false;
-
+  isGameRestarted = true;
   // Show introduction overlay again
-  introductionOverlay.style.display = "block";
+  //introductionOverlay.style.display = "block";
+  startGame()
 }
 
 // Handle key presses
@@ -515,10 +516,12 @@ continueButton.addEventListener("click", () => {
 restartButton.addEventListener("click", restartGame);
 
 // Start game when "Start Game" button is clicked
-startGameButton.addEventListener("click", () => {
-  introductionOverlay.style.display = "none";
-  startGame();
-});
+if (!isGameRestarted){
+  startGameButton.addEventListener("click", () => {
+    introductionOverlay.style.display = "none";
+    startGame();
+  });
+}
 
 // Continue game after development message
 continueStoryButton.addEventListener("click", () => {
